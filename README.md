@@ -1,2 +1,2 @@
-# Software_design
+# Software design
 Spbau homeworks
