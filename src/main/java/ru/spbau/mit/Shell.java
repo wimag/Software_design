@@ -44,7 +44,7 @@ public class Shell {
             try {
                 processLine(scanner.nextLine(), output);
             } catch (Exception e) {
-                new PrintStream(output).println("Info - " + e.getMessage());
+                new PrintStream(output).println("Error - " + e.getMessage());
             }
         }
     }

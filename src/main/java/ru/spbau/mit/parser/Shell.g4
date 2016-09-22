@@ -26,12 +26,20 @@ private String replaceVar(String str) {
 
     for (int i = 0; i < newStr.length(); i++) {
         char ch = newStr.charAt(i);
-
         if (!isRef) {
-            if (ch == '$') isRef = true;
-            else result.append(ch);
+            boolean isNotRefStart = (ch != '$') ||
+                                    (i == newStr.length() - 1) ||
+                                    (i != 0 && newStr.charAt(i - 1) == '\\') ||
+                                    (i != newStr.length() - 1 &&
+                                        !newStr.substring(i + 1, i + 2).matches("[_a-zA-Z]"));
+
+            if (isNotRefStart) {
+                result.append(ch);
+            } else {
+                isRef = true;
+            }
         } else {
-            if (!(ref + ch).matches("[_a-zA-z][_a-zA-z0-9]*")) {
+            if (!(ref + ch).matches("[_a-zA-Z][_a-zA-Z0-9]*")) {
                 String value = env.get(ref);
                 result.append(value == null ? "" : value);
                 i--;
@@ -91,7 +99,7 @@ PIPE: '|';
 STRONG_QUOTES_STR: '\'' CHAR* '\'';
 WEAK_QUOTES_STR: '"' CHAR* '"';
 REF: '$' IDENTIFIER;
-IDENTIFIER: [_a-zA-z][_a-zA-z0-9]*;
+IDENTIFIER: [_a-zA-Z][_a-zA-Z0-9]*;
 WORD: (~[ \t\n'"$|=])+;
 
 fragment CHAR: ('\u0020' .. '\u007F') | ('\\' ('t' | 'n' | '"' | '\'' | '\\'));

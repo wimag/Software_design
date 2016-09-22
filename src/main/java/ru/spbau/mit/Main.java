@@ -1,10 +1,7 @@
 package ru.spbau.mit;
 
 
-import ru.spbau.mit.programs.Cat;
-import ru.spbau.mit.programs.Echo;
-import ru.spbau.mit.programs.Pwd;
-import ru.spbau.mit.programs.Wc;
+import ru.spbau.mit.programs.*;
 
 
 public class Main {
@@ -14,6 +11,7 @@ public class Main {
                 .add(new Echo())
                 .add(new Pwd())
                 .add(new Wc())
+                .add(new Grep())
                 .toShell();
 
         shell.run(System.in, System.out);
