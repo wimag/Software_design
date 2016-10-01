@@ -12,7 +12,7 @@ import ru.spbau.mit.programs.Wc;
 
 
 public class ShellTest {
-    final Shell shell = new Shell.ShellBuilder()
+    final Shell shell = new ShellBuilder()
                         .add(new Cat())
                         .add(new Echo())
                         .add(new Pwd())
@@ -107,7 +107,10 @@ public class ShellTest {
 
     @Test
     public void grepTest() throws IOException {
-        final String text = "This is temp file\n4 8 15 15 23 42";
+        final String text = "This is temp file\n" +
+                "4 8 15 15 23 42\n" +
+                "sdfdsf sdfsdf ssdfs\n" +
+                "sdffsdewrwe rtyrt  rtyr rtywr w";
 
         File tempFile = File.createTempFile("testFile", ".txt");
         String filePath = tempFile.getPath();

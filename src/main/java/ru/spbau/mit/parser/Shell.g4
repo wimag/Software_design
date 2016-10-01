@@ -21,7 +21,7 @@ private String getEnvVar(String name) {
 private String replaceVar(String str) {
     String newStr = str.substring(1, str.length() - 1);
     StringBuilder result = new StringBuilder();
-    String ref= "";
+    String ref = "";
     boolean isRef = false;
 
     for (int i = 0; i < newStr.length(); i++) {

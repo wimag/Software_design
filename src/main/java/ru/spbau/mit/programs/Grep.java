@@ -59,11 +59,13 @@ public class Grep implements Program {
     private Pattern getPattern(String regexpr, Options opt) {
         String curRegexpr = regexpr;
 
-        if (opt.onlyWords)
+        if (opt.onlyWords) {
             curRegexpr = "\\b" + curRegexpr + "\\b";
+        }
 
-        if (opt.ignoreCase)
+        if (opt.ignoreCase) {
             return Pattern.compile(curRegexpr, Pattern.CASE_INSENSITIVE);
+        }
 
         return Pattern.compile(curRegexpr);
     }
@@ -78,7 +80,7 @@ public class Grep implements Program {
             Matcher matcher = pattern.matcher(lines.get(i));
 
             if (matcher.find()) {
-                for (int j = i; j <= i + nPrintLines && j < lines.size(); i++) {
+                for (int j = i; j <= i + nPrintLines && j < lines.size(); j++) {
                     output.println(lines.get(j));
                 }
             }
@@ -88,15 +90,18 @@ public class Grep implements Program {
     @Override
     public void execute(List<String> arguments, InputStream input, OutputStream output) {
         PrintStream curOutput = new PrintStream(output);
-
         Options opt = getOptions(arguments);
+
+        if (arguments.size() <= opt.nOptions) {
+            System.out.println("Can not find pattern");
+            return;
+        }
+
         String regexpr = arguments.get(opt.nOptions);
         Pattern pattern = getPattern(regexpr, opt);
 
-        if (arguments.size() > opt.nOptions) {
-
+        if (arguments.size() > opt.nOptions + 1) {
             for (int i = opt.nOptions + 1; i < arguments.size(); i++) {
-
                 try (Scanner scanner = new Scanner(new File(arguments.get(i)))) {
                     curOutput.println(arguments.get(i));
                     process(pattern, opt.nPrintLines, scanner, curOutput);

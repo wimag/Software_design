@@ -1,6 +1,5 @@
 package ru.spbau.mit;
 
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -9,7 +8,6 @@ import ru.spbau.mit.parser.ShellParser;
 
 import java.io.*;
 import java.util.*;
-
 
 /**
  * The Shell
@@ -35,7 +33,9 @@ public class Shell {
     }
 
     /**
-     * Run the Shell
+     * Run the shell
+     * @param input - input of shell
+     * @param output - output of shell
      */
     public void run(InputStream input, OutputStream output) {
         Scanner scanner = new Scanner(input);
@@ -49,6 +49,10 @@ public class Shell {
         }
     }
 
+    /**
+     * Add program to shell
+     * @param program - object of Program
+     */
     public void addCommand(Program program) {
         commands.put(program.getName(), program);
     }
@@ -77,7 +81,6 @@ public class Shell {
         while (scanner.hasNextLine()) {
             currentOutput.println(scanner.nextLine());
         }
-
     }
 
     private void execCommand(Command cmd, InputStream input, OutputStream output) throws IOException {
@@ -97,16 +100,22 @@ public class Shell {
         }
     }
 
-    private void processLine(String line, OutputStream resultOutput) throws IOException {
+    private List<Command> getCommands(String line) {
         CharStream stream = new ANTLRInputStream(line);
         ShellLexer lexer = new ShellLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ShellParser parser = new ShellParser(tokens);
 
         parser.setEnv(environment);
-        List<Command> cmdList = parser.start().list;
-        if (cmdList == null)
+
+        return parser.start().list;
+    }
+
+    private void processLine(String line, OutputStream resultOutput) throws IOException {
+        List<Command> cmdList = getCommands(line);
+        if (cmdList == null) {
             return;
+        }
 
         InputStream input = null;
         OutputStream output = null;
@@ -128,31 +137,6 @@ public class Shell {
             execCommand(curCmd, input, output);
 
             input = nextInput;
-        }
-    }
-
-    public static final class ShellBuilder {
-        Shell shell = null;
-
-        public ShellBuilder add(Program program) {
-            if (shell == null) {
-                shell = new Shell();
-            }
-            shell.addCommand(program);
-
-            return this;
-        }
-
-        public ShellBuilder addAll(Collection<? extends Program> programs) {
-            for (Program prog : programs) {
-                add(prog);
-            }
-
-            return this;
-        }
-
-        public Shell toShell() {
-            return shell;
         }
     }
 }

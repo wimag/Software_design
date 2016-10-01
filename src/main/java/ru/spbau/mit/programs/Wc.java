@@ -18,10 +18,11 @@ public class Wc implements Program {
     @Override
     public void execute(List<String> arguments, InputStream input, OutputStream output) {
         PrintStream currentOutput = new PrintStream(output);
-        int nLinesAll = 0, nWordsAll = 0, nBytesAll = 0;
+        int nLinesAll = 0;
+        int nWordsAll = 0;
+        int nBytesAll = 0;
 
         if (arguments.size() != 0) {
-
             for (String arg : arguments) {
                 try (Scanner scanner = new Scanner(new File(arg), "UTF-8")) {
                     int[] array = calcFromScanner(scanner);

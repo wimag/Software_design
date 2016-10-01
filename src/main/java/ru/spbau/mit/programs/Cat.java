@@ -1,11 +1,9 @@
 package ru.spbau.mit.programs;
 
-
 import ru.spbau.mit.Program;
 import java.io.*;
 import java.util.List;
 import java.util.Scanner;
-
 
 /**
  * Program cat

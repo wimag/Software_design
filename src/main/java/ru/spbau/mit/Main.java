@@ -1,12 +1,12 @@
 package ru.spbau.mit;
 
-
 import ru.spbau.mit.programs.*;
 
+public final class Main {
+    private Main() {}
 
-public class Main {
     public static void main(String[] args) {
-        Shell shell = new Shell.ShellBuilder()
+        Shell shell = new ShellBuilder()
                 .add(new Cat())
                 .add(new Echo())
                 .add(new Pwd())
