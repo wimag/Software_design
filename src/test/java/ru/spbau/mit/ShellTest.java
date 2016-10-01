@@ -104,34 +104,4 @@ public class ShellTest {
         final String cmd2 = "echo " + text2 +" | wc";
         assertEquals("1 1 5", runShell(cmd2));
     }
-
-    @Test
-    public void grepTest() throws IOException {
-        final String text = "This is temp file\n" +
-                "4 8 15 15 23 42\n" +
-                "sdfdsf sdfsdf ssdfs\n" +
-                "sdffsdewrwe rtyrt  rtyr rtywr w";
-
-        File tempFile = File.createTempFile("testFile", ".txt");
-        String filePath = tempFile.getPath();
-        PrintStream fileStream = new PrintStream(tempFile);
-        fileStream.println(text);
-        fileStream.close();
-
-        final String cmd1 = "grep \"temp\" " + filePath;
-        assertEquals("This is temp file", runShell(cmd1));
-
-        final String cmd2 = "grep \"temp$\" " + filePath;
-        assertEquals("", runShell(cmd2));
-
-        final String cmd3 = "grep -i \"^this\" " + filePath;
-        assertEquals("This is temp file", runShell(cmd3));
-
-        final String cmd4 = "grep -w \"Thi\" " + filePath;
-        assertEquals("", runShell(cmd4));
-
-        final String cmd5 = "grep -A 3 \"Thi\" " + filePath;
-        assertEquals(text, runShell(cmd5));
-
-    }
 }

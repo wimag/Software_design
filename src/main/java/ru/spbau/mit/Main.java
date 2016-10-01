@@ -11,7 +11,6 @@ public final class Main {
                 .add(new Echo())
                 .add(new Pwd())
                 .add(new Wc())
-                .add(new Grep())
                 .toShell();
 
         shell.run(System.in, System.out);
