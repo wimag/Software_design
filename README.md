@@ -3,6 +3,8 @@ Spbau homeworks
 
 
 # Shell
+https://www.pivotaltracker.com/n/projects/1882795
+
 Каждая программа шелла (Shell) - класс, реализующий интерфейс Program.
 
 Объект Shell'a создается при помощи вложенного в Shell класса, ShellBuilder, добавляя объекты классов-программ, либо непосредственно конструктором, добаляя объекты классов-программ методом addCommand.
