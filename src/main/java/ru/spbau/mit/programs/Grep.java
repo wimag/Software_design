@@ -50,7 +50,7 @@ public class Grep implements Program {
         }
         if (options.has("A")) {
             opt.nPrintLines = (Integer) options.valueOf("A");
-            opt.nOptions++;
+            opt.nOptions += 2;
         }
 
         return opt;
@@ -103,10 +103,13 @@ public class Grep implements Program {
         if (arguments.size() > opt.nOptions + 1) {
             for (int i = opt.nOptions + 1; i < arguments.size(); i++) {
                 try (Scanner scanner = new Scanner(new File(arguments.get(i)))) {
-                    curOutput.println(arguments.get(i));
+                    if (arguments.size() - opt.nOptions - 1 > 1) {
+                        curOutput.println(arguments.get(i));
+                    }
                     process(pattern, opt.nPrintLines, scanner, curOutput);
 
                 } catch (FileNotFoundException e) {
+                    System.out.println(e.getMessage());
                     curOutput.format("grep: File %s is not found.\n", arguments.get(i));
                 }
             }

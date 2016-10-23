@@ -119,7 +119,6 @@ public class Shell {
 
         InputStream input = null;
         OutputStream output = null;
-        PipedInputStream nextInput = null;
 
         for (int i = 0; i < cmdList.size(); i++) {
             if (output != null) {
@@ -129,14 +128,12 @@ public class Shell {
             if (i == cmdList.size() - 1) {
                 output = resultOutput;
             } else  {
-                nextInput = new PipedInputStream();
-                output = new PipedOutputStream(nextInput);
+                output = new ByteArrayOutputStream();
             }
 
             Command curCmd = cmdList.get(i);
             execCommand(curCmd, input, output);
-
-            input = nextInput;
+            input = new ByteArrayInputStream(((ByteArrayOutputStream) output).toByteArray());
         }
     }
 }

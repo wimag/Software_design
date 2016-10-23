@@ -1,15 +1,11 @@
 package ru.spbau.mit;
 
-
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import ru.spbau.mit.programs.*;
+
 import java.io.*;
 
-import ru.spbau.mit.programs.Cat;
-import ru.spbau.mit.programs.Echo;
-import ru.spbau.mit.programs.Pwd;
-import ru.spbau.mit.programs.Wc;
-
+import static org.junit.Assert.assertEquals;
 
 public class ShellTest {
     final Shell shell = new ShellBuilder()
@@ -17,6 +13,7 @@ public class ShellTest {
                         .add(new Echo())
                         .add(new Pwd())
                         .add(new Wc())
+                        .add(new Grep())
                         .toShell();
 
     private String runShell(String command) {
@@ -133,5 +130,9 @@ public class ShellTest {
         final String cmd5 = "grep -A 3 \"Thi\" " + filePath;
         assertEquals(text, runShell(cmd5));
 
+        final String cmd6 = "cat pom.xml | grep build";
+        final String resultCmd6 = "    <build>\n" +
+                                  "    </build>";
+        assertEquals(resultCmd6, runShell(cmd6));
     }
 }
