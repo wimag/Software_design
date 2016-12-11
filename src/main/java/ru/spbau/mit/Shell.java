@@ -40,12 +40,14 @@ public class Shell {
     public void run(InputStream input, OutputStream output) {
         Scanner scanner = new Scanner(input);
 
+        System.out.print(">> ");
         while (scanner.hasNextLine()) {
             try {
                 processLine(scanner.nextLine(), output);
             } catch (Exception e) {
                 new PrintStream(output).println("Error - " + e.getMessage());
             }
+            System.out.print(">> ");
         }
     }
 
@@ -133,7 +135,9 @@ public class Shell {
 
             Command curCmd = cmdList.get(i);
             execCommand(curCmd, input, output);
-            input = new ByteArrayInputStream(((ByteArrayOutputStream) output).toByteArray());
+            if (i != cmdList.size() - 1) {
+                input = new ByteArrayInputStream(((ByteArrayOutputStream) output).toByteArray());
+            }
         }
     }
 }
