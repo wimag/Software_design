@@ -1,11 +1,15 @@
 package ru.spbau.mit;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import ru.spbau.mit.programs.*;
 
 import java.io.*;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ShellTest {
     final Shell shell = new ShellBuilder()
@@ -14,6 +18,8 @@ public class ShellTest {
                         .add(new Pwd())
                         .add(new Wc())
                         .add(new Grep())
+                        .add(new Ls())
+                        .add(new Cd())
                         .toShell();
 
     private String runShell(String command) {
@@ -29,6 +35,9 @@ public class ShellTest {
 
         return result;
     }
+
+    @Rule
+    public TemporaryFolder tmpFolder = new TemporaryFolder();
 
     @Test
     public void echoTest() {
@@ -134,5 +143,40 @@ public class ShellTest {
         final String resultCmd6 = "    <build>\n" +
                                   "    </build>";
         assertEquals(resultCmd6, runShell(cmd6));
+    }
+
+    @Test
+    public void lsTest() throws IOException {
+        String[] folders = {"folder1", "folder2", "folder3"};
+        String[] files = {"file1", "file2", "file3"};
+        for (String folder: folders){
+            tmpFolder.newFolder(folder);
+        }
+        for (String file: files){
+            tmpFolder.newFile(file);
+        }
+
+        String result = runShell("ls " + tmpFolder.getRoot());
+
+        for (String folder: folders){
+            assertTrue(result.contains(folder + "/"));
+        }
+        for (String file: files){
+            assertTrue(result.contains(file));
+        }
+    }
+
+    @Test
+    public void cdTest() throws IOException {
+        String[] folders = {"folder1", "folder2", "folder3"};
+        for (String folder: folders){
+            tmpFolder.newFolder(folder);
+        }
+
+        runShell("cd " + tmpFolder.getRoot().getAbsolutePath());
+        assertEquals(tmpFolder.getRoot().getAbsolutePath(), runShell("pwd").trim());
+
+        runShell("cd " + folders[0]);
+        assertEquals(Paths.get(tmpFolder.getRoot().getAbsolutePath(), folders[0]).toString(), runShell("pwd").trim());
     }
 }
